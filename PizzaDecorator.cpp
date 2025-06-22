@@ -6,7 +6,6 @@ class CoffeBase {
     public:
     virtual int Price() = 0;
     virtual string Name() = 0;
-    virtual ~CoffeBase() = default; 
 };
 
 class Expresso : public CoffeBase {
@@ -32,24 +31,18 @@ class Americano : public CoffeBase {
 
 class Toppings : public CoffeBase {
     
+    protected:
+    CoffeBase *coffeBase;
     
     public:
-    
-    CoffeBase* coffeBase;
-    
     Toppings (CoffeBase* coffeBase) : coffeBase (coffeBase) {}
-    
-    virtual ~Toppings () {
-        delete coffeBase;
-    }
 };
 
 
 class sugar : public Toppings {
     
     public:
-    
-    sugar (CoffeBase *coffeBase) : Toppings (coffeBase) {}
+    sugar(CoffeBase *coffeBase) : Toppings (coffeBase) {}
     
     string Name () override {
         return coffeBase->Name() + " + sugar";
@@ -83,6 +76,9 @@ int main() {
     
     cout<<coffee->Price()<<" "<<coffee->Name()<<endl;
     
+    coffee = new sugar(new milk( new Americano()));
+    
+    cout<<coffee->Price()<<" "<<coffee->Name()<<endl;
     
     delete coffee;
 }
