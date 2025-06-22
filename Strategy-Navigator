@@ -1,0 +1,51 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class ITravelPath {
+public:
+   virtual void TravelRoute (string start, string end) = 0;
+};
+
+class CarPath : public ITravelPath {
+public:
+    void TravelRoute (string start, string end) override {
+        cout<<"Showing Car Route from: "<<start<<" to: "<<end<<endl;
+    }
+};
+
+class BikePath : public ITravelPath {
+public:
+    void TravelRoute (string start, string end) override {
+        cout<<"Showing Bike Route from: "<<start<<" to: "<<end<<endl;
+    }
+};
+
+class Navigator {
+private:
+    ITravelPath *travelPath;
+
+public:
+    Navigator (ITravelPath *ctravelPath) : travelPath(ctravelPath) {}
+    
+    void newNavigator(ITravelPath *cctravelPath) {
+        travelPath= cctravelPath;
+    }
+    
+    void Navigate(string from, string to){
+        travelPath->TravelRoute(from, to);
+    }
+};
+
+
+int main()
+{
+    BikePath bp;
+    CarPath cp;
+    
+    Navigator *app = new Navigator(&bp);
+    app->Navigate("Home", "office");
+    
+    app->newNavigator(&cp);
+    app->Navigate("Home", "vacation");
+}
+
