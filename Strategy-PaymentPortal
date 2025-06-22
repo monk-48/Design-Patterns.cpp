@@ -1,0 +1,55 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+// Strategy Interfaces
+class IPaymentGateway {
+public:
+    virtual void PaymentMethod(int amount) = 0;
+};
+
+// Strategy Implementations
+class CreditCard : public IPaymentGateway {
+public: 
+    void PaymentMethod (int amount) override {
+        cout<<amount<<" Will be deducted from your CreditCard"<<endl;
+    }
+
+};
+
+class DebitCard : public IPaymentGateway {
+public:
+    void PaymentMethod (int amount) override {
+        cout<<amount<<" Will be deducted from your DebitCard"<<endl;
+    }
+};
+
+// Context Passing Class
+class PaymentPortal {
+private:
+    IPaymentGateway *paymentGateway;
+    
+public:
+    PaymentPortal (IPaymentGateway *paymentGateway) : paymentGateway(paymentGateway) {}
+    
+    void newPaymentMethod (IPaymentGateway *newpaymentgateway) {
+        paymentGateway= newpaymentgateway;
+    }
+    
+    void processPayment(int amount){
+        paymentGateway-> PaymentMethod(amount);
+    }
+};
+
+
+int main()
+{
+    CreditCard cc;
+    
+    PaymentPortal pp(&cc);
+    pp.processPayment(1000);
+    
+    DebitCard dc;
+    pp.newPaymentMethod(&dc);
+    pp.processPayment(1200);
+}
+
