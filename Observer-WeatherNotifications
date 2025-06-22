@@ -1,0 +1,76 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+// observer Interface class
+class IDevices {
+public: 
+    virtual void update (int temperature, string weather) = 0;
+};
+
+// concrete observer1
+class Phone : public IDevices {
+public:
+    void update (int temperature, string weather) override {
+        cout<<"Phone update: temperature is "<<temperature<<" Weather is "<<weather<<endl;
+    }
+};
+
+// concrete observer2
+class Watch : public IDevices {
+public:
+    void update (int temperature, string weather) override {
+        cout<<"Watch update: temperature is "<<temperature<<" Weather is "<<weather<<endl;
+    }
+};
+
+// Subject/ Observable Interface class
+class IWeatherupdates {
+public:
+    virtual void add (IDevices *device) = 0;
+    virtual void del (IDevices *device) = 0;
+    virtual void notify() = 0;
+};
+
+// conrete Observable
+class Weatherupdates : public IWeatherupdates {
+private:
+    vector<IDevices*> devices;     // parent class pointer to child class-object
+    int Temperature;
+    string Weather;
+public:
+    void add (IDevices* device) override{
+        devices.push_back(device);
+    }
+    
+    void del (IDevices* device) override{
+        devices.erase(remove(devices.begin(), devices.end(), device), devices.end());
+    }
+    
+    void notify() override {
+        for(IDevices *d : devices){
+            d->update(Temperature, Weather);
+        }
+    }
+    
+    void setMeasurements (int temperature, string weather) {
+         Temperature= temperature;
+         Weather= weather;
+         notify(); //PUSH notifications to all the registered observers
+    }
+};
+
+int main()
+{
+    Phone ph;
+    Watch wt;
+    
+    Weatherupdates wu;
+    wu.add(&ph);
+    wu.add(&wt);
+    
+    wu.setMeasurements(25, "sunny");
+    
+    wu.del(&wt);
+    
+    wu.setMeasurements(22, "rainy");
+}
