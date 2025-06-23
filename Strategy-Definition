@@ -1,0 +1,52 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class IStrategyInterface {
+public:
+    virtual void behaviour(string val) = 0;
+};
+
+class Strategy1 : public IStrategyInterface {
+public:
+    void behaviour(string val) override {
+        cout<<"1. Output is behaviour "<<val<<endl;
+    }
+};
+
+class Strategy2 : public IStrategyInterface {
+public:
+    void behaviour(string val) override {
+        cout<<"2. Input is behaviour "<<val<<endl;
+    }
+};
+
+class Context {
+private:
+    IStrategyInterface* strategyInterface;
+public:
+    Context (IStrategyInterface* strategyInterface) : strategyInterface (strategyInterface) {}
+    
+    void newContext (IStrategyInterface* newstrategyInterface ) {
+        strategyInterface= newstrategyInterface;
+    }
+    
+    void perform (string val) {
+        strategyInterface->behaviour(val);
+    }
+};
+
+int main()
+{
+    Strategy1 s1;
+    
+    Context c(&s1);
+    c.perform("Check1");
+    
+    Strategy2 s2;
+    
+    c.newContext(&s2);
+    c.perform("Check2");
+    
+    
+}
+
