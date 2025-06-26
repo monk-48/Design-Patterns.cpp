@@ -1,0 +1,79 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class IBaseClass {
+public:
+    virtual string description() = 0;
+    virtual int cost()= 0;
+};
+
+class Implementation1 : public IBaseClass {
+public:
+    string description() override {
+        return "Implementation1 : ";
+    }
+    
+    int cost() override {
+        return 100;
+    }
+};
+
+class Implementation2 : public IBaseClass {
+public:
+    string description() override {
+        return "Implementation2 : ";
+    }
+    
+    int cost() override {
+        return 101;
+    }
+};
+
+// decorator class "is-A" base class + "has-A" base class
+class Idecorator : public IBaseClass {
+protected:
+    IBaseClass *baseClass;
+    
+public:
+    Idecorator(IBaseClass *baseClass) : baseClass(baseClass) {}
+};
+
+class decorator1 : public Idecorator {
+public:
+    decorator1(IBaseClass *baseClass) : Idecorator(baseClass) {}
+    
+    string description() override {
+        return baseClass->description()+ "decorator1 :: ";
+    }
+    
+    int cost() override {
+        return baseClass->cost()+ 10;
+    }
+    
+};
+
+class decorator2 : public Idecorator {
+public:
+    decorator2(IBaseClass *baseClass) : Idecorator(baseClass) {}
+    
+    string description() override {
+        return baseClass->description()+ "decorator2 :: ";
+    }
+    
+    int cost() override {
+        return baseClass->cost()+ 20;
+    }
+    
+};
+
+int main()
+{
+    IBaseClass *baseClass = new decorator1 (new Implementation1);
+    
+    cout<<baseClass->description()<<" ::: "<<baseClass->cost()<<endl;
+    
+    baseClass=  new decorator2 ( new decorator1 (new Implementation2 ));
+    
+    cout<<baseClass->description()<<" ::: "<<baseClass->cost()<<endl;
+}
+
